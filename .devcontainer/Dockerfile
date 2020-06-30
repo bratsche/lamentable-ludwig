@@ -136,7 +136,7 @@ RUN apt-get update -yq\
     && apt-get purge -y imagemagick imagemagick-6-common \
     #
     # Configure VSCode as the default editor for git commits
-    && git config --global core.editor "code --wait" \
+    && sudo -u codespace git config --global core.editor "code --wait" \
     #
     # Clean up
     && apt-get autoremove -y \
