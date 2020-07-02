@@ -16,8 +16,6 @@ ARG EXTRA_PATHS_OVERRIDES="~/.dotnet"
 # ~/.npm-global/bin - For npm global bin directory in user directory
 ARG USER_EXTRA_PATHS="${EXTRA_PATHS}:~/.local/bin:~/.npm-global/bin"
 
-ARG GIT_ED_SCRIPT="if [[ $(which code-insiders) && ! $(which code) ]]; then ED='code-insiders'; else ED='code'; fi; $ED --wait $@"
-
 ARG NVS_HOME="/home/codespace/.nvs"
 
 ARG DeveloperBuild
@@ -32,6 +30,8 @@ ENV DOTNET_ROOT=/home/codespace/.dotnet
 
 # Add script to fix .NET Core pathing
 ADD symlinkDotNetCore.sh /tmp/codespace/symlinkDotNetCore.sh
+
+ADD git-ed.sh /tmp/codespace/git-ed.sh
 
  # Install packages, setup codespace user
 RUN apt-get update -yq\
@@ -136,8 +136,7 @@ RUN apt-get update -yq\
     #
     # Configure VSCode as the default editor for git commits
     && sudo -u codespace mkdir -p /home/codespace/.local/bin \
-    && { echo && echo $GIT_ED_SCRIPT ; } | sudo -u codespace tee -a /home/codespace/.local/bin/git-ed.sh \
-    && sudo -u codespace chmod +x /home/codespace/.local/bin/git-ed.sh \
+    && install -o codespace -g codespace -m 755 /tmp/codespace/git-ed.sh /home/codespace/.local/bin/git-ed.sh \
     && sudo -u codespace git config --global core.editor "/home/codespace/.local/bin/git-ed.sh" \
     #
     # Clean up
