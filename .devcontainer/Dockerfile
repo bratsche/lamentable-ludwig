@@ -16,6 +16,8 @@ ARG EXTRA_PATHS_OVERRIDES="~/.dotnet"
 # ~/.npm-global/bin - For npm global bin directory in user directory
 ARG USER_EXTRA_PATHS="${EXTRA_PATHS}:~/.local/bin:~/.npm-global/bin"
 
+ARG GIT_ED_SCRIPT="if [[ $(which code-insiders) && ! $(which code) ]]; then ED='code-insiders'; else ED='code'; fi; $ED --wait $@"
+
 ARG NVS_HOME="/home/codespace/.nvs"
 
 ARG DeveloperBuild
@@ -134,7 +136,8 @@ RUN apt-get update -yq\
     #
     # Configure VSCode as the default editor for git commits
     && sudo -u codespace mkdir -p /home/codespace/.local/bin \
-    && sudo -u codespace echo "if [[ $(which code-insiders) && ! $(which code) ]]; then ED='code-insiders'; else ED='code'; fi; $ED --wait $@" | sudo -u codespace tee -a /home/codespace/.local/bin/git-ed.sh \
+    && { echo && echo $GIT_ED_SCRIPT ; } | sudo -u codespace tee -a /home/codespace/.local/bin/git-ed.sh \
+    && sudo -u codespace chmod +x /home/codespace/.local/bin/git-ed.sh \
     && sudo -u codespace git config --global core.editor "/home/codespace/.local/bin/git-ed.sh" \
     #
     # Clean up
