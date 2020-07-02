@@ -134,7 +134,7 @@ RUN apt-get update -yq\
     #
     # Configure VSCode as the default editor for git commits
     && sudo -u codespace mkdir -p /home/codespace/.local/bin \
-    && sudo -u codespace echo "if [[ $(which code-insiders) && ! $(which code) ]]; then ED='code-insiders'; else ED='code'; fi; $ED --wait $@" | tee -a /home/codespace/.local/bin/git-ed.sh \
+    && sudo -u codespace echo "if [[ $(which code-insiders) && ! $(which code) ]]; then ED='code-insiders'; else ED='code'; fi; $ED --wait $@" | sudo -u codespace tee -a /home/codespace/.local/bin/git-ed.sh \
     && sudo -u codespace git config --global core.editor "/home/codespace/.local/bin/git-ed.sh" \
     #
     # Clean up
