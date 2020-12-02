@@ -1,95 +1,326 @@
 {
-	"definitionVersion": "0.8.0",
+	"definitionVersion": "1.0.0",
 	"build": {
 		"latest": true,
 		"rootDistro": "debian",
 		"tags": [
+			"universal:${VERSION}-focal",
 			"universal:${VERSION}-linux",
 			"universal:${VERSION}"
 		]
 	}, 
 	"dependencies": {
-		"image": "mcr.microsoft.com/oryx/build:vso-20200417.5",
+		"image": "mcr.microsoft.com/oryx/build:vso-focal-20201110.1",
 		"imageLink": "https://github.com/microsoft/oryx",
 		"debian": [
-			"default-jdk",
+			"apt-utils",
+			"git",
+			"openssh-client",
+			"gnupg2",
+			"iproute2",
+			"procps",
+			"lsof",
+			"htop",
+			"net-tools",
+			"psmisc",
+			"curl",
+			"wget",
+			"rsync",
+			"ca-certificates",
+			"unzip",
+			"zip",
+			"tar",
+			"nano",
+			"vim-tiny",
+			"less",
+			"jq",
+			"lsb-release",
+			"apt-transport-https",
+			"dialog",
+			"libc6",
+			"libgcc1",
+			"libgssapi-krb5-2",
+			"libicu[0-9][0-9]",
+			"liblttng-ust0",
+			"libstdc++6",
+			"zlib1g",
+			"locales",
+			"sudo",
+			"ncdu",
+			"man-db",
+			"zsh",
 			"vim", 
-			"sudo", 
 			"xtail",
 			"fish", 
-			"zsh",
 			"git-lfs",
-			"libkrb5-3",
-			"libicu57",
-			"openssl",
-			"zlib1g",
-			"lsb-release",
-			"curl", 
-			"gnupg",
-			"apt-transport-https",
+			"docker",
 			"debian-archive-keyring",
-			"software-properties-common"
+			"software-properties-common",
+			"openjdk-8-jdk"
 		],
-		"manual": [
-			{
-				"Component": {
-					"Type": "git",
-					"git": {
-						"Name": "Oh My Zsh!",
-						"repositoryUrl": "https://github.com/robbyrussell/oh-my-zsh",
-						"commitHash": "c130aadb6a66aa680a322c08d87ad773316f713d"
-					}
-				}
+		"pipx": [
+			"pylint",
+			"flake8",
+			"autopep8",
+			"black",
+			"yapf",
+			"mypy",
+			"pydocstyle",
+			"pycodestyle",
+			"bandit",
+			"virtualenv",
+			"pipx"
+		],
+		"git": {
+			"Oh My Zsh!": "/home/codespace/.oh-my-zsh",
+			"Oh My Bash!": "/home/codespace/.oh-my-bash",
+			"nvm": "/home/codespace/.nvm",
+			"nvs": "/home/codespace/.nvs",
+			"rbenv": "/usr/local/share/rbenv",
+			"ruby-build": "/usr/local/share/ruby-build"
+		},
+		"gem": [
+			"rake",
+			"ruby-debug-ide",
+			"debase"
+		],
+		"cargo": {
+			"rls": "rls --version",
+			"rustfmt": "rustfmt --version",
+			"rust-analysis": null,
+			"rust-src": null,
+			"clippy": null
+		},
+		"other": {
+			"Xdebug": {
+				"versionCommand": "php --version | grep -oE 'Xdebug\\sv[^,]+' | sed -n '/Xdebug\\sv/s///p'",
+				"downloadUrl":"https://xdebug.org/"
 			},
-			{
-				"Component": {
-					"Type": "git",
-					"git": {
-						"Name": "Nvm",
-						"repositoryUrl": "https://github.com/nvm-sh/nvm",
-						"commitHash": "8093dbeacdfde0f4740ea6d5becb234dea9eb430"
-					}
-				}
+			"Composer": {
+				"versionCommand": "composer --version | grep -oE 'version\\s[^ ]+' | sed -n '/version\\s/s///p'",
+				"downloadUrl": "https://getcomposer.org/"
 			},
-			{
-				"Component": {
-					"Type": "git",
-					"git": {
-						"Name": "Nvs",
-						"repositoryUrl": "https://github.com/jasongin/nvs",
-						"commitHash": "b6a607d9c36840ea8051586695d57a644402273c"
-					}
-				}
+			"kubectl": {
+				"versionCommand": "kubectl version --client | grep -oE 'GitVersion:\\\"v[^\\\"]+' | sed -n '/GitVersion:\\\"v/s///p'",
+				"downloadUrl": "https://github.com/kubernetes/kubectl"
 			},
-			{
-				"Component": {
-					"Type": "git",
-					"git": {
-						"Name": "Oh My Zsh!",
-						"repositoryUrl": "https://github.com/robbyrussell/oh-my-zsh",
-						"commitHash": "c130aadb6a66aa680a322c08d87ad773316f713d"
-					}
-				}
+			"Helm": {
+				"versionCommand": "helm version | grep -oE 'Version:\\\"v[^\\\"]+' | sed -n '/Version:\\\"v/s///p'",
+				"downloadUrl": "https://github.com/helm/helm"
 			},
-			{
-				"Component": {
-					"Type": "other",
-					"Other": {
-						"Name": "kubectl",
-						"Version": "1.18.2",
-						"DownloadUrl": "https://storage.googleapis.com/kubernetes-release/release/v1.18.2/bin/linux/amd64/kubectl"
-					}
-				}
+			"Docker Compose": {
+				"versionCommand": "docker-compose version | grep -oE 'version\\s[^,]+' | sed -n '/version\\s/s///p'",
+				"downloadUrl": "https://github.com/docker/compose"
 			},
-			{
+			"SDKMAN!": {
+				"versionCommand": "sdk version | sed -n '/.*SDKMAN\\s/s///p'",
+				"downloadUrl": "https://github.com/sdkman/sdkman-cli"
+			},
+			"AdoptOpenJDK": {
+				"versionCommand": "java -version 2>&1 | grep -oE -m 1 '.*build\\s[^\\)]+' | sed -n '/.*build\\s/s///p'",
+				"downloadUrl": "https://adoptopenjdk.net/"
+			},
+			"GitHubCLI": {
+				"versionCommand": "gh version 2>&1 | grep -oE 'version\\s[^ ]+' | sed -n '/version\\s/s///p'",
+				"downloadUrl": "https://github.com/cli/cli"
+			},
+			"Go": {
+				"versionCommand": "go version | grep -oE -m 1 'version\\sgo[^ ]+' | sed -n '/^version\\sgo/s///p'",
+				"downloadUrl": "https://golang.org/dl"
+			},
+			"Rust": {
+				"versionCommand": "rustc --version | grep -oE '^rustc\\s[^ ]+' | sed -n '/rustc\\s/s///p'",
+				"downloadUrl": "https://github.com/rust-lang/rust"
+			},
+			"rvm": {
+				"versionCommand": "rvm --version | grep -oE -m 1 'rvm\\s[^ ]+' | sed -n '/^rvm\\s/s///p'",
+				"downloadUrl": "https://github.com/rvm/rvm"
+			}
+		},
+		"manual": [{
 				"Component": {
-					"Type": "other",
-					"Other": {
-						"Name": "Helm",
-						"Version": "3.2.1",
-						"DownloadUrl": "https://get.helm.sh/helm-v3.2.1-linux-amd64.tar.gz"
-					}
-				}
+				   "Type": "go",
+				   "Go": {
+					 "Name": "golang.org/x/tools/gopls",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "honnef.co/go/tools",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "golang.org/x/tools/cmd/gorename",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "golang.org/x/tools/cmd/goimports",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "golang.org/x/tools/cmd/guru",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "golang.org/x/lint/golint",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/mdempsky/gocode",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/cweill/gotests",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/haya14busa/goplay/cmd/goplay",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/sqs/goreturns",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/josharian/impl",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/davidrjenni/reftools/cmd/fillstruct",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/uudashr/gopkgs/v2/cmd/gopkgs",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/ramya-rao-a/go-outline",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/acroca/go-symbols",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/godoctor/godoctor",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/rogpeppe/godef",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/zmb3/gogetdoc",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/fatih/gomodifytags",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/mgechev/revive",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/go-delve/delve/cmd/dlv",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/stamblerre/gocode",
+					 "Version": "latest"
+				   }
+				 }
+			}, {
+				"Component": {
+				   "Type": "go",
+				   "Go": {
+					 "Name": "github.com/golangci/golangci-lint",
+					 "Version": "latest"
+				   }
+				 }
 			}
 		]
 	}

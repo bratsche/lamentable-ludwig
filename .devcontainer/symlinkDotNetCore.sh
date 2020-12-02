@@ -6,24 +6,24 @@
 
 set -ex
 
-splitSdksDir="/opt/dotnet/sdks"
+splitSdksDir="/opt/dotnet"
 
 allSdksDir="/home/codespace/.dotnet"
 mkdir -p "$allSdksDir"
 
 # Copy latest muxer and license files
-cp -f "$splitSdksDir/3/dotnet" "$allSdksDir"
-cp -f "$splitSdksDir/3/LICENSE.txt" "$allSdksDir"
-cp -f "$splitSdksDir/3/ThirdPartyNotices.txt" "$allSdksDir"
+cp -f "$splitSdksDir/lts/dotnet" "$allSdksDir"
+cp -f "$splitSdksDir/lts/LICENSE.txt" "$allSdksDir"
+cp -f "$splitSdksDir/lts/ThirdPartyNotices.txt" "$allSdksDir"
 
 function createLinks() {
     local sdkVersion="$1"
-    local runtimeVersion="$2"
     
-    cd "$splitSdksDir/$sdkVersion"
+    installedDir="$splitSdksDir/$sdkVersion"
+    cd "$installedDir"
 
-    # Find folders with name as sdk or runtime version
-    find . -name "$sdkVersion" -o -name "$runtimeVersion" | while read subPath; do
+    # Find folders with the name being a version number like 3.1.0 or 3.1.301
+    find . -maxdepth 3 -type d -regex '.*/[0-9]\.[0-9]\.[0-9]+' | while read subPath; do
         # Trim beginning 2 characters from the line which currently looks like, for example, './sdk/2.2.402'
         subPath="${subPath:2}"
         
@@ -31,17 +31,13 @@ function createLinks() {
         linkFromParentDir=$(dirname $linkFrom)
         mkdir -p "$linkFromParentDir"
 
-        linkTo="$splitSdksDir/$sdkVersion/$subPath"
-        ln -s $linkTo $linkFrom
+        linkTo="$installedDir/$subPath"
+        ln -sTf $linkTo $linkFrom
     done
 }
 
-createLinks "3.1.202" "3.1.4"
+createLinks "3.1.404"
 echo
-createLinks "3.0.103" "3.0.3"
+createLinks "2.1.811"
 echo
-createLinks "2.2.402" "2.2.7"
-echo
-createLinks "2.1.806" "2.1.17"
-echo
-createLinks "1.1.14" "1.1.13"
+createLinks "5.0.100"
