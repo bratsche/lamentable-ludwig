@@ -50,6 +50,8 @@ check "python" python --version
 check "dotnet" dotnet --info
 check "node" node --version
 check "php" php --version
+check "ruby" ruby --version
+check "dotnet" dotnet --version
 
 # Check expected shells
 check "bash" bash --version
